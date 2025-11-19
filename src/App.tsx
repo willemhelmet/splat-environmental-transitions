@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import { Loader, Stats } from "@react-three/drei";
+import { Loader } from "@react-three/drei";
 import { Scene } from "./Scene";
 
 function App() {
@@ -10,7 +10,6 @@ function App() {
           <Scene />
           <color attach="background" args={[0, 0, 0]} />
         </Canvas>
-        <Stats />
         <Loader />
       </div>
     </>
