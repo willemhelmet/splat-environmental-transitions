@@ -36,16 +36,16 @@ export const Scene = () => {
     localPoint.y *= -1;
     localPoint.z *= -1;
     // Instantly update the origin to the corrected local point
-    origin.value.copy(localPoint);
+    (origin as any).value.copy(localPoint);
 
     // Tell the dyno shaders which splat is hiding and which is showing
     const nextActiveSplat = (activeSplat + 1) % NUM_SPLATS;
-    hidingIndex.value = activeSplat;
-    showingIndex.value = nextActiveSplat;
+    (hidingIndex as any).value = activeSplat;
+    (showingIndex as any).value = nextActiveSplat;
 
     // Stop any animation that's currently running on 'amount'
     gsap.killTweensOf(transitionProgress);
-    transitionProgress.value = 0;
+    (transitionProgress as any).value = 0;
     gsap.to(transitionProgress, {
       value: 1,
       duration: 2.5,
