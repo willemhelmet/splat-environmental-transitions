@@ -39,7 +39,7 @@ export const Splat = ({
                   int showingIndex,
                   int hidingIndex
                 ) {
-                  float visibility = step(distance(pos, origin), transitionProgress * 10.0);
+                  float visibility = step(distance(pos, origin), transitionProgress * 12.5);
                   float finalOpacity = 0.0;
 
                   if (myIndex == showingIndex) {
