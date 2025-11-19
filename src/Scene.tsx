@@ -61,8 +61,10 @@ export const Scene = () => {
       {/* <axesHelper /> */}
       <Collider clicked={handleClick} />
       <CameraControls
-        azimuthAngle={Math.PI * 0.125}
-        polarAngle={Math.PI * 0.35}
+        azimuthAngle={Math.PI * 0.5}
+        polarAngle={Math.PI * 0.45}
+        distance={2}
+        maxDistance={3}
       />
       <SparkRenderer args={[sparkRendererArgs]}>
         <ForestSponza
