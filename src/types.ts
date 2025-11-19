@@ -7,6 +7,7 @@ export interface SponzaTypes {
   showingIndex: dyno.DynoVal<"int">;
   origin: dyno.DynoVal<"vec3">;
   transitionProgress: dyno.DynoVal<"float">;
+  url: string;
 }
 
 export interface ColliderTypes {

@@ -10,6 +10,7 @@ import { ForestSponza } from "./components/splats/ForestSponza";
 import { TechnoSponza } from "./components/splats/TechnoSponza";
 import { Collider } from "./components/Collider";
 import { LibrarySponza } from "./components/splats/LibrarySponza";
+import { Splat } from "./components/splats/Splat.tsx";
 
 export const Scene = () => {
   const renderer = useThree((state) => state.gl);
@@ -67,12 +68,13 @@ export const Scene = () => {
         maxDistance={3}
       />
       <SparkRenderer args={[sparkRendererArgs]}>
-        <ForestSponza
+        <Splat
           origin={origin}
           transitionProgress={transitionProgress}
           myIndex={0}
           hidingIndex={hidingIndex}
           showingIndex={showingIndex}
+          url="ForestSponza.sog"
         />
         <TechnoSponza
           origin={origin}
@@ -80,13 +82,15 @@ export const Scene = () => {
           myIndex={1}
           hidingIndex={hidingIndex}
           showingIndex={showingIndex}
+          url="TechnoSponza.sog"
         />
-        <LibrarySponza
+        <Splat
           origin={origin}
           transitionProgress={transitionProgress}
           myIndex={2}
           hidingIndex={hidingIndex}
           showingIndex={showingIndex}
+          url="LibrarySponza.sog"
         />
       </SparkRenderer>
     </>
