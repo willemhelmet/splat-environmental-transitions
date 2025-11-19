@@ -6,10 +6,7 @@ import { Vector3 } from "three";
 import { gsap } from "gsap";
 
 import { SparkRenderer } from "./components/spark/SparkRenderer";
-import { ForestSponza } from "./components/splats/ForestSponza";
-import { TechnoSponza } from "./components/splats/TechnoSponza";
 import { Collider } from "./components/Collider";
-import { LibrarySponza } from "./components/splats/LibrarySponza";
 import { Splat } from "./components/splats/Splat.tsx";
 
 export const Scene = () => {
@@ -76,7 +73,7 @@ export const Scene = () => {
           showingIndex={showingIndex}
           url="ForestSponza.sog"
         />
-        <TechnoSponza
+        <Splat
           origin={origin}
           transitionProgress={transitionProgress}
           myIndex={1}
