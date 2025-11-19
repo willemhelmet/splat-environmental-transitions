@@ -20,7 +20,11 @@ export const Scene = () => {
     [],
   );
 
-  const NUM_SPLATS = 3;
+  const splatUrls = [
+    "ForestSponza.sog",
+    "TechnoSponza.sog",
+    "LibrarySponza.sog",
+  ];
   const [activeSplat, setActiveSplat] = useState(0);
 
   const transitionProgress = useMemo(() => dyno.dynoFloat(1), []);
@@ -37,7 +41,7 @@ export const Scene = () => {
     (origin as any).value.copy(localPoint);
 
     // Tell the dyno shaders which splat is hiding and which is showing
-    const nextActiveSplat = (activeSplat + 1) % NUM_SPLATS;
+    const nextActiveSplat = (activeSplat + 1) % splatUrls.length;
     (hidingIndex as any).value = activeSplat;
     (showingIndex as any).value = nextActiveSplat;
 
@@ -65,30 +69,17 @@ export const Scene = () => {
         maxDistance={3}
       />
       <SparkRenderer args={[sparkRendererArgs]}>
-        <Splat
-          origin={origin}
-          transitionProgress={transitionProgress}
-          myIndex={0}
-          hidingIndex={hidingIndex}
-          showingIndex={showingIndex}
-          url="ForestSponza.sog"
-        />
-        <Splat
-          origin={origin}
-          transitionProgress={transitionProgress}
-          myIndex={1}
-          hidingIndex={hidingIndex}
-          showingIndex={showingIndex}
-          url="TechnoSponza.sog"
-        />
-        <Splat
-          origin={origin}
-          transitionProgress={transitionProgress}
-          myIndex={2}
-          hidingIndex={hidingIndex}
-          showingIndex={showingIndex}
-          url="LibrarySponza.sog"
-        />
+        {splatUrls.map((url, index) => (
+          <Splat
+            origin={origin}
+            transitionProgress={transitionProgress}
+            myIndex={index}
+            hidingIndex={hidingIndex}
+            showingIndex={showingIndex}
+            url={url}
+            key={index}
+          />
+        ))}
       </SparkRenderer>
     </>
   );
