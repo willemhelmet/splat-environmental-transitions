@@ -5,9 +5,9 @@ import { dyno } from "@sparkjsdev/spark";
 import { Vector3 } from "three";
 import { gsap } from "gsap";
 
-import { SparkRenderer } from "./components/spark/SparkRenderer";
-import { Collider } from "./components/Collider";
-import { Splat } from "./components/splats/Splat.tsx";
+import { SparkRenderer } from "./SparkRenderer";
+import { Collider } from "./Collider.tsx";
+import { Splat } from "./Splat.tsx";
 
 export const Scene = () => {
   const renderer = useThree((state) => state.gl);

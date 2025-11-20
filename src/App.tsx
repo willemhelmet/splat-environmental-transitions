@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { Loader } from "@react-three/drei";
-import { Scene } from "./Scene";
+import { Scene } from "./components/Scene";
 
 function App() {
   return (

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { SplatMesh, dyno } from "@sparkjsdev/spark";
-import { type SponzaTypes } from "../../types";
+import { type SponzaTypes } from "../types";
 
 export const Splat = ({
   myIndex,
