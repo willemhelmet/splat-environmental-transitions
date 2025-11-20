@@ -12755,7 +12755,7 @@ void main() {
                   return band;
                 }
 
-                vec4 calculateOpacity(
+                vec4 calculateColor(
                   vec4 initialColor,
                   vec3 pos,
                   vec3 origin,
@@ -12786,9 +12786,37 @@ void main() {
                     initialColor.a * finalOpacity
                   );
                 }
+              // vec3 calculateTranslation(
+              //   vec3 pos,
+              //   vec3 origin,
+              //   float transitionProgress
+              // ) {
+              //   float displacementStrength = 0.2;
+              //   vec3 displacementDirection = normalize(pos - origin);
+              //   float dist = distance(pos, origin);
+              //   float glowThickness = 0.4;
+              //   float radius = transitionProgress * 12.5;
+              //   float glow = getSphericalGlow(dist, radius, glowThickness);
+              //   return pos + (displacementDirection * glow * displacementStrength);
+              // }
+
+              vec3 calculateScale(
+                vec3 pos,
+                vec3 scale,
+                vec3 origin,
+                float transitionProgress
+              ) {
+                float scaleStrength = 0.02;
+                vec3 displacementDirection = normalize(pos - origin);
+                float dist = distance(pos, origin);
+                float glowThickness = 0.4;
+                float radius = transitionProgress * 12.5;
+                float glow = getSphericalGlow(dist, radius, glowThickness);
+                return scale + (displacementDirection * glow * scaleStrength);
+              }
               `)],statements:({inputs:g,outputs:m})=>cr.unindentLines(`
                 ${m.gsplat} = ${g.gsplat};
-                ${m.gsplat}.rgba = calculateOpacity(
+                ${m.gsplat}.rgba = calculateColor(
                   ${g.gsplat}.rgba,
                   ${g.gsplat}.center,
                   ${g.origin},
@@ -12796,5 +12824,16 @@ void main() {
                   ${g.myIndex},
                   ${g.showingIndex},
                   ${g.hidingIndex}
+                );
+                // ${m.gsplat}.center = calculateTranslation(
+                //   ${g.gsplat}.center,
+                //   ${g.origin},
+                //   ${g.transitionProgress}
+                // );
+                ${m.gsplat}.scales = calculateScale(
+                  ${g.gsplat}.center,
+                  ${g.gsplat}.scales,
+                  ${g.origin},
+                  ${g.transitionProgress}
                 );
               `)}).apply({gsplat:A,origin:t,transitionProgress:i,myIndex:cr.dynoConst("int",a),showingIndex:n,hidingIndex:e}).gsplat,{gsplat:A})),onFrame({mesh:A}){A.updateVersion()}}),[i,t,a,n,e,r]);return dn.jsx(dn.Fragment,{children:dn.jsx("group",{rotation:[Math.PI,0,0],children:dn.jsx("primitive",{object:l})})})},hX=()=>{const a=Jc(g=>g.gl),t=se.useMemo(()=>({renderer:a}),[a]),e=se.useMemo(()=>cr.dynoVec3(new Y(0,0,0)),[]),n=["ForestSponza.sog","TechnoSponza.sog","LibrarySponza.sog"],[i,r]=se.useState(0),l=se.useMemo(()=>cr.dynoFloat(1),[]),u=se.useMemo(()=>cr.dynoInt(0),[]),A=se.useMemo(()=>cr.dynoInt(-1),[]);function d(g){const m=g.clone();m.y*=-1,m.z*=-1,e.value.copy(m);const x=(i+1)%n.length;A.value=i,u.value=x,Gb.killTweensOf(l),l.value=0,Gb.to(l,{value:1,duration:2.5,ease:"power1.inOut"}),r(x)}return dn.jsxs(dn.Fragment,{children:[dn.jsx(cX,{clicked:d}),dn.jsx(hH,{azimuthAngle:Math.PI*.5,polarAngle:Math.PI*.45,distance:2,maxDistance:3}),dn.jsx(lX,{args:[t],children:n.map((g,m)=>dn.jsx(uX,{origin:e,transitionProgress:l,myIndex:m,hidingIndex:A,showingIndex:u,url:g},m))})]})};function fX(){return dn.jsx(dn.Fragment,{children:dn.jsxs("div",{className:"flex h-screen w-screen",children:[dn.jsxs(tH,{gl:{antialias:!1},dpr:1,children:[dn.jsx(hX,{}),dn.jsx("color",{attach:"background",args:[0,0,0]})]}),dn.jsx(rH,{})]})})}bL.createRoot(document.getElementById("root")).render(dn.jsx(se.StrictMode,{children:dn.jsx(fX,{})}));
