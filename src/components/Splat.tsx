@@ -30,6 +30,13 @@ export const Splat = ({
             globals: () => [
               dyno.defineGsplat,
               dyno.unindent(`
+                float getSphericalGlow(float dist, float radius, float thickness) {
+                  float halfThickness = thickness / 2.0;
+                  float band = smoothstep(radius - halfThickness, radius, dist) -
+                              smoothstep(radius, radius + halfThickness, dist);
+                  return band;
+                }
+
                 vec4 calculateOpacity(
                   vec4 initialColor,
                   vec3 pos,
@@ -39,7 +46,15 @@ export const Splat = ({
                   int showingIndex,
                   int hidingIndex
                 ) {
-                  float visibility = step(distance(pos, origin), transitionProgress * 12.5);
+                  float dist = distance(pos, origin);
+                  float radius = transitionProgress * 12.5;
+                  float glowThickness = 0.5;
+                  float glow = getSphericalGlow(dist, radius, glowThickness);
+                  vec3 glowColor = vec3(0.0, 1.0, 1.0); // Cyan, change this to a gradient
+
+                  vec3 finalRgb = initialColor.rgb + (glowColor * glow);
+
+                  float visibility = step(dist, radius);
                   float finalOpacity = 0.0;
 
                   if (myIndex == showingIndex) {
@@ -49,7 +64,7 @@ export const Splat = ({
                   }
 
                   return vec4(
-                    initialColor.rgb,
+                    finalRgb,
                     initialColor.a * finalOpacity
                   );
                 }
