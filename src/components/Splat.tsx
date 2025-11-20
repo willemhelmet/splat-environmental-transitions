@@ -37,7 +37,7 @@ export const Splat = ({
                   return band;
                 }
 
-                vec4 calculateOpacity(
+                vec4 calculateColor(
                   vec4 initialColor,
                   vec3 pos,
                   vec3 origin,
@@ -68,12 +68,40 @@ export const Splat = ({
                     initialColor.a * finalOpacity
                   );
                 }
+              // vec3 calculateTranslation(
+              //   vec3 pos,
+              //   vec3 origin,
+              //   float transitionProgress
+              // ) {
+              //   float displacementStrength = 0.2;
+              //   vec3 displacementDirection = normalize(pos - origin);
+              //   float dist = distance(pos, origin);
+              //   float glowThickness = 0.4;
+              //   float radius = transitionProgress * 12.5;
+              //   float glow = getSphericalGlow(dist, radius, glowThickness);
+              //   return pos + (displacementDirection * glow * displacementStrength);
+              // }
+
+              vec3 calculateScale(
+                vec3 pos,
+                vec3 scale,
+                vec3 origin,
+                float transitionProgress
+              ) {
+                float scaleStrength = 0.02;
+                vec3 displacementDirection = normalize(pos - origin);
+                float dist = distance(pos, origin);
+                float glowThickness = 0.4;
+                float radius = transitionProgress * 12.5;
+                float glow = getSphericalGlow(dist, radius, glowThickness);
+                return scale + (displacementDirection * glow * scaleStrength);
+              }
               `),
             ],
             statements: ({ inputs, outputs }) =>
               dyno.unindentLines(`
                 ${outputs.gsplat} = ${inputs.gsplat};
-                ${outputs.gsplat}.rgba = calculateOpacity(
+                ${outputs.gsplat}.rgba = calculateColor(
                   ${inputs.gsplat}.rgba,
                   ${inputs.gsplat}.center,
                   ${inputs.origin},
@@ -81,6 +109,17 @@ export const Splat = ({
                   ${inputs.myIndex},
                   ${inputs.showingIndex},
                   ${inputs.hidingIndex}
+                );
+                // ${outputs.gsplat}.center = calculateTranslation(
+                //   ${inputs.gsplat}.center,
+                //   ${inputs.origin},
+                //   ${inputs.transitionProgress}
+                // );
+                ${outputs.gsplat}.scales = calculateScale(
+                  ${inputs.gsplat}.center,
+                  ${inputs.gsplat}.scales,
+                  ${inputs.origin},
+                  ${inputs.transitionProgress}
                 );
               `),
           });
