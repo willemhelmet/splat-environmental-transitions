@@ -1,5 +1,7 @@
 # Marble Gaussian Splat Environmental Transitions
 
+![Demo video](demo.gif)
+
 This project is a web-based 3D application built with React and Three.js that
 demonstrates animated transitions between multiple Gaussian Splat scenes.
 
