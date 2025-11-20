@@ -9,9 +9,6 @@ export const Collider = ({ clicked }: ColliderTypes) => {
   };
   return (
     <>
-      <directionalLight />
-      <pointLight position={[0, 2, 0]} />
-
       <Box position={[0, 2, 0]} scale={[11, 5.5, 2]} onClick={handleClick}>
         <meshStandardMaterial visible={false} side={BackSide} />
       </Box>

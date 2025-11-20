@@ -37,6 +37,12 @@ export const Scene = () => {
     const localPoint = point.clone();
     localPoint.y *= -1;
     localPoint.z *= -1;
+
+    // WHP: I couldn't figure out how to use the SparkJS types,
+    //      seems like it may be a bug on their end? `.value`
+    //      is not understood to be a property of DynoVal.
+    //      Not sure how to fix so I begrudgingly used "as any"
+
     // Instantly update the origin to the corrected local point
     (origin as any).value.copy(localPoint);
 
