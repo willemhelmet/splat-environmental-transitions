@@ -55,13 +55,17 @@ export const Splat = ({
                   vec3 finalRgb = initialColor.rgb + (glowColor * glow);
 
                   float visibility = step(dist, radius);
-                  float finalOpacity = 0.0;
 
-                  if (myIndex == showingIndex) {
-                    finalOpacity = visibility;
-                  } else if (myIndex == hidingIndex) {
-                    finalOpacity = 1.0 - visibility;
-                  }
+                  // Create "masks".
+                  // casting boolean to float returns 1.0 for true, 0.0 for false.
+                  float isShowing = float(myIndex == showingIndex);
+                  float isHiding = float(myIndex == hidingIndex);
+
+                  // Combine using math.
+                  // If isShowing is 1.0, we add (visibility).
+                  // If isHiding is 1.0, we add (1.0 - visibility).
+                  // If neither (isShowing=0, isHiding=0), the result is 0.0.
+                  float finalOpacity = (isShowing * visibility) + (isHiding * (1.0 - visibility));
 
                   return vec4(
                     finalRgb,
