@@ -1,73 +1,106 @@
-# React + TypeScript + Vite
+# Marble Gaussian Splat Environmental Transitions
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a web-based 3D application built with React and Three.js that
+demonstrates animated transitions between multiple Gaussian Splat scenes.
 
-Currently, two official plugins are available:
+**[Live Demo](https://willemhelmet.github.io/splat-environmental-transitions/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Process
 
-## React Compiler
+### Project Goals
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The goal of this project was to create multiple consistent Gaussian Splat environments.
+In order to showcase the consistency between splats, I created a transition
+effect that highlighted the architectural similarity between the three environments.
 
-## Expanding the ESLint configuration
+### Generating Environments
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+While Marble was in beta, I struggled to create consistent Gaussian Splats that
+respected the source image/3D model scale and architectural details.
+In an earlier experiment, [my previous attempt](https://github.com/willemhelmet/consistent-marble-splats)
+involved building a 3D scene in Blender, and rendering an equirectangular 360 photo
+to be used as the "ground truth" for my Gaussian Splat Environments.
+I used a separate AI image-editing program to transform the initial photo into a
+new environment, and passed both images into Marble to generate the Gaussian
+Splat Environment. A large amount of my time for this project was trying to
+wrangle the two environments into appearing as if they were one and the same.
+It was not trivial!
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+For this project, the environments were made using
+[Marble](https://marble.worldlabs.ai/)'s new "Chisel" feature. I used a 3D model
+of the popular "Sponza" environment to generate a depth-map, which was passed
+along with a text-prompt to build the 3D scenes. Overall the process was much
+more intuitive and led to environments that needed little-to-no extra processing.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Optimizing Gaussian Splats
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Since I wanted to showcase multiple environments, and have this experience run
+on a multitude of devices, I would need to optimize my Gaussian Splats quite a
+bit from their original state.
+
+After downloading the `.ply` files from Marble, I used
+[`splat-transform`](https://github.com/playcanvas/splat-transform)
+to remove every splat that was below 50% opacity:
+
+```sh
+splat-transform input.ply -V opacity,gt,0.5 output.ply
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+To remove additional color data I got rid of all spherical harmonics:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+splat-transform input.ply --filter-harmonics 2 output.ply
 ```
+
+And then I converted the `.ply` splat into a `.sog`:
+
+```sh
+splat-transform input.ply output.sog
+```
+
+This led to a ~50% reduction in number of splats, and a ~100% reduction of file-size.
+
+### Transition Effect
+
+To render the Guassian Splats on the web, I used [Spark](https://sparkjs.dev/),
+a new Gaussian Splat renderer for Three.js. A core pillar of Spark is a shader-graph
+system called `dyno`, which allows you to write GLSL code for your Splats.
+Using `dyno`, I was able to create a generic `<Splat>` component that contained
+all the necessary GLSL code for all three environments. A parent
+component handled the state, and animation values, which were passed into
+the shader code.
+
+## How to Run Locally
+
+1. **Clone the repository:**
+
+   ```sh
+   git clone https://github.com/willemhelmet/splat-environmental-transitions.git
+   ```
+
+2. **Navigate to the project directory:**
+
+   ```sh
+   cd splat-environmental-transitions
+   ```
+
+3. **Install dependencies:**
+
+   ```sh
+   npm install
+   ```
+
+4. **Run the development server:**
+
+   ```sh
+   npm run dev
+   ```
+
+The application will be available at `http://localhost:5173`
+(or the next available port).
+
+## Credits
+
+["Sponza Palace"](https://skfb.ly/pxp8q) by abhayexe is
+licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/)
+
